@@ -1,36 +1,35 @@
-const {dbGet, dbSet} = require("../../config/firebase");
-
+const { dbGet, dbSet, dbQuery } = require("../../config/firebase");
 
 const getUserHandler = async ({
-    document,
-    filter
+    document
 }) => {
-    try{
-       const data = await dbGet({
-           collection: "users",
-           document,
-           filter
-       });
-       return data;
-    }catch(error){
+    try {
+        const data = await dbGet({
+            collection: "users",
+            document
+        });
+        return data;
+    } catch (error) {
         console.log("[service][user][getUserHandler] error on get user", error);
         return false
     }
 }
 
 const setUserHandler = async ({
-    data
+    name,
+    email,
+    password
 }) => {
-    try{
-        dbSet({
+    try {
+        const doc = dbSet({
             collection: "users",
-            document: "",
-            data
+            data: { name, email, password }
         });
-        console.log("[service][user][getUserHandler] set user");
-        return true;
-    }catch(error){
+
+        return doc;
+    } catch (error) {
         console.log("[service][user][getUserHandler] error on set user", error);
+        return false;
     }
 }
 
